@@ -13,8 +13,11 @@
     <script>
     function Setup() {
       $( function() { 
-        $("#header").load("header.html");
+        $("#navbar").load("navbar.html");
+        $("#blog-header").load("blog-header.html");
         $("#sidebar").load("sidebar.html");
+        $("#post1").load("post1.html");
+        $("#footer").load("footer.html");
       });
     }
     </script>
@@ -22,22 +25,16 @@
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" defer></script>
   </head>
   <body>
-    <div id="header"></div>
+    <div id="navbar"></div>
     <div class ="container">
-      <div class="blog-header">
-        <h1 class="blog-title">Ryan Pliske Blogs</h1>
-        <p class="lead blog-description">Occasionally I'll blog about software development.</p>
-      </div>
+      <div id="blog-header"></div>
       <div class="row">
         <div class="col-sm-8 blog-main">
-            <div class="blog-post">
-              <h2 class="blog-post-title">Sample blog post</h2>
-              <p class="blog-post-meta">January 1, 2016</p>
-          </div>
+          <div id="post1" class="blog-post"></div>
         </div>
         <div id="sidebar"></div>
       </div>
     </div>
   </body>
-  <footer id="footer" class="blog-footer"><p><a href="#">Back to top</a></p></footer>
+  <footer id="footer"></footer>
 </html>
