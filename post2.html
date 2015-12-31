@@ -1,0 +1,26 @@
+<h2 class="blog-post-title">Git Ignores</h2>
+<p class="blog-post-meta">December 31, 2015</p>
+<hr>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	It doesn't matter if you're developing a game using Microsoft Visual Studio, or building an iOS application in Xcode, sooner or later you're going to be developing on a team. Regardless of whether you choose SVN, Git or something else for your version control, there are going to be some files you want to keep on your local machine and never pushed to your shared server. 
+</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	If you choose to use git for your version control, you can accomplish this by setting up a <b>.gitignore</b> file. This file should be in the same directory that your .git folder is located. In iOS applications, I find it works best if you ignore your .xcuserstate data. This data contains information like breakpoints that you set or any schemes that you've created. 
+</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	Additionally, You should be aware that if you're using Cocoapods, I find it best if you don't push your pods to your repository. The only file relevant to your pods that you want in your repository is your Podfile and perhaps your Podfile.lock. If you end up keeping your pods in your repository, whenever a teammate installs or updates Cocoapods on their local machine, they'll end up messing up everyones. I just recently had a friend mess up their build and it took 3 of us to fix the problem. 
+</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	Lastly, storyboard files can turn into a nuisance when attempting to solve merge conflicts. It's usually a good idea to split up your storyboards: <a href="http://www.raywenderlich.com/115697/ios-9-storyboards-tutorial-whats-new-in-storyboards" target="_blank">More Info Here</a>. Below I've included an example for a .gitignore file:
+</p>
+<blockquote>
+	*.pbxuser</br>
+	*.mode1v3</br>
+	*.mode2v3</br>
+	*.perspectivev3</br>
+	*.xcuserstate</br>
+	<i>ProjectName</i>.xcworkspace/</br>
+	xcuserdata/</br>
+	# Pods - for those of you using CocoaPods</br>
+	Pods/</br>
+</blockquote>

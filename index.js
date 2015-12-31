@@ -6,6 +6,7 @@ function Setup() {
     $("#blog-header").load("blog-header.html");
     $("#sidebar").load("sidebar.html");
     $("#post1").load("post1.html");
+    $("#post2").load("post2.html");
     $("#footer").load("footer.html");
   });
 }
