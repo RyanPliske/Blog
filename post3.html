@@ -8,7 +8,7 @@
     My company, CompetiDev, is developing both an iOS and tvOS multiplayer game. These will be two separate, but related applications. My plan for the AppleTV version is to spin up a server which will serve TVML to my user's AppleTV in order to display the main menu for the game.
 </p>
 <p class="indent">
-    Once they've selected their character, I want to load the game using a Game Scene (SpriteKit). When the game is over we'd come back to the main menu (TVML). I've added this ability to my spike and have made it available <a href="https://github.com/RyanPliske/AppleTVSpike" target="_blank">Here</a>. I'll briefly go over the important parts. Let's go!
+    Once they've selected their character, I want to load the game using a <span class="blog-class">GameScene</span> (SpriteKit). When the game is over we'd come back to the main menu (TVML). I've added this ability to my spike and have made the <b>full</b> version available <a href="https://github.com/RyanPliske/AppleTVSpike" target="_blank">Here</a>. I'll briefly go over a few of the important parts for this blog. Let's go!
 </p>
 <p class="indent">
 	Firstly, my <span class="blog-class">AppDelegate</span> takes advantage of the <i>didFinishLaunchingWithOptions</i> method which is called by <span class="blog-class">UIApplication</span> when the tvOS app is done initially spinning up. It's main purpose is to create the <span class="blog-class">UIWindow</span> and <span class="blog-myclass">MyTVApp</span> and hold onto these objects.
@@ -26,8 +26,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 </code></pre>
 <p class="indent">
-	Secondly, <span class="blog-myclass">MyTVApp</span> adheres to a custom delegate, <span class="blog-myclass">MyTVAppControllerDelegate</span> that I created. It listens to if and when the server responds with my main menu's TVML.
+	Secondly, I created a custom protocol, <span class="blog-myclass">MyTVAppControllerDelegate</span> that I created by extending Apple's protocol <span class="blog-class">TVApplicationControllerDelegate</span>. Out of the box, Apple's delegate simply listens to if and when the server responds with my main menu's TVML. I've modified it so that it can also listen to custom methods that I call from my Javascript. That way I can call <span style="color:#ff6600">gameStarted()</span> from my <b>Javascript</b> and <b>Swift</b> will receive that notification. It's magic! (This ability has been around for a while. So nothing is really new here.)
 </p>
+<pre><code class="swift code">import TVMLKit
+
+protocol MyTVAppControllerDelegate: class, TVApplicationControllerDelegate {
+    
+    func gameDidStartWithMessage(message: String)
+    
+}
+</code></pre>
+<p class="indent">
+    Thirdly, <span class="blog-myclass">MyTVApp</span> adheres to this delegate so that it will receive the <span style="color:#ff6600">gameStarted()</span> JS notification. Here I can simply present the <span class="blog-class">GameScene</span> controlled by a <span class="blog-class">UIViewController</span>.
+</p>
+
+
 <pre><code class="swift code">import TVMLKit
 
 class MyTVApp: NSObject, MyTVAppControllerDelegate {
@@ -38,12 +51,7 @@ class MyTVApp: NSObject, MyTVAppControllerDelegate {
         super.init()
         appController = MyTVAppController(window: window, delegate: self)
     }
-    
-    func appController(appController: TVApplicationController, didFinishLaunchingWithOptions options: [String : AnyObject]?) {
-        self.appController.setupGameStartedListener()
-        self.appController.setupJavaScriptConsoleLog()
-    }
-    
+
     func gameDidStartWithMessage(message: String) {
         print(message)
         let viewController = UIViewController()
@@ -52,9 +60,15 @@ class MyTVApp: NSObject, MyTVAppControllerDelegate {
     }
 }
 </code></pre>
-<p>
-    Blah Blah Blah
+<p class="indent">
+    Lastly, the meat and potatoes. <span class="blog-myclass">MyTVAppController</span> does all of the real work (this part <i>is</i> new). It is the bridge between JS and Swift. Apple's Documentation states:
 </p>
+<blockquote>
+    The <span class="blog-class">TVApplicationController</span> class establishes the JavaScript environment to provide a centralized point of control and co-ordination. The class bridges the UI, navigation stack, storage and event handling from JavaScript.
+</blockquote>
+<p class="indent">
+    By subclassing this class, I've added all my initialization here. Take a look at the code and then I'll explain it below.
+</p>    
 <pre><code class="swift code">import TVMLKit
 
 private typealias JavascriptClosure = (JSContext) -> Void
@@ -63,13 +77,6 @@ private typealias ObjectivecCompletionBlock = @convention(block) (String) -> Voi
 private let TVBaseURL = "http://localhost:9001/"
 
 class MyTVAppController: TVApplicationController {
-    
-    init(window: UIWindow?, delegate: MyTVAppControllerDelegate?) {
-        let appControllerContext = TVApplicationControllerContext()
-        appControllerContext.javaScriptApplicationURL = NSURL(string: "\(TVBaseURL)js/application.js")!
-        appControllerContext.launchOptions["BASEURL"] = TVBaseURL
-        super.init(context: appControllerContext, window: window, delegate: delegate)
-    }
     
     // This creates a function on your server which can be called using JS by gameStarted(str)
     func setupGameStartedListener() {
@@ -85,3 +92,6 @@ class MyTVAppController: TVApplicationController {
     }
 }
 </code></pre>
+<p class="indent">
+    By subclassing this class, I've added all my initialization here. 
+</p> 
