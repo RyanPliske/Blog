@@ -19,6 +19,14 @@ h6, .h6 {
   color: #333;
 }
 
+/*
+ * Code
+ */
+ .code {
+  overflow: auto; 
+  word-wrap: normal; 
+  white-space: pre;
+}
 
 /*
  * Override Bootstrap's default container.

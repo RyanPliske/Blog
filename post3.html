@@ -17,15 +17,75 @@
 <p>
 	Firstly, my <b>App Delegate</b> takes advantage of the <i>didFinishLaunchingWithOptions</i> method which is called by UIApplication when the tvOS app is done initially setting up. It's main purpose is to setup the window that manages the views my app displays on the TV screen and to setup <b>MyTVApp</b> and hold onto this object.
 </p>
-<pre><code class="Swift" style="overflow-x:scroll">
-@UIApplicationMain
-class <b>AppDelegate</b>: UIResponder, UIApplicationDelegate {
-	var window: UIWindow?
-	var tvApp: <b>MyTVApp</b>!
-	<p style="white-space:nowrap">func application(application: UIApplication, <i>didFinishLaunchingWithOptions</i> launchOptions: [NSObject : AnyObject]?) -> Bool {</p>
-	    window = UIWindow(frame: UIScreen.mainScreen().bounds)
-	    tvApp = MyTVApp(window: window!)
-	    return true
-	}
+<pre><code class="swift code">@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    var window: UIWindow?
+    var tvApp: MyTVApp!
+    
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        tvApp = MyTVApp(window: window!)
+        return true
+    }
+}
+</code></pre>
+<p>
+	Secondly, <b>MyTVApp</b> adheres to a custom delegate, MyTVAppControllerDelegate that I created. It listens to if and when the server responds with my HTML
+</p>
+<pre><code class="swift code">import TVMLKit
+
+class MyTVApp: NSObject, MyTVAppControllerDelegate {
+    
+    var appController: MyTVAppController!
+    
+    init(window: UIWindow) {
+        super.init()
+        appController = MyTVAppController(window: window, delegate: self)
+    }
+    
+    func appController(appController: TVApplicationController, didFinishLaunchingWithOptions options: [String : AnyObject]?) {
+        self.appController.setupGameStartedListener()
+        self.appController.setupJavaScriptConsoleLog()
+    }
+    
+    func gameDidStartWithMessage(message: String) {
+        print(message)
+        let viewController = UIViewController()
+        viewController.view.backgroundColor = UIColor.blueColor()
+        self.appController.navigationController.presentViewController(viewController, animated: true, completion: nil)
+    }
+}
+</code></pre>
+<p>
+    Blah Blah Blah
+</p>
+<pre><code class="swift code">import TVMLKit
+
+private typealias JavascriptClosure = (JSContext) -> Void
+private typealias ObjectivecCompletionBlock = @convention(block) (String) -> Void
+
+private let TVBaseURL = "http://localhost:9001/"
+
+class MyTVAppController: TVApplicationController {
+    
+    init(window: UIWindow?, delegate: MyTVAppControllerDelegate?) {
+        let appControllerContext = TVApplicationControllerContext()
+        appControllerContext.javaScriptApplicationURL = NSURL(string: "\(TVBaseURL)js/application.js")!
+        appControllerContext.launchOptions["BASEURL"] = TVBaseURL
+        super.init(context: appControllerContext, window: window, delegate: delegate)
+    }
+    
+    // This creates a function on your server which can be called using JS by gameStarted(str)
+    func setupGameStartedListener() {
+        let gameStarted: JavascriptClosure = {
+            [unowned self](context: JSContext) -> Void in
+            let objCompletion: ObjectivecCompletionBlock = {
+                (str: String) -> Void in
+                (self.delegate as? MyTVAppControllerDelegate)?.gameDidStartWithMessage(str)
+            }
+            context.setObject(unsafeBitCast(objCompletion, AnyObject.self), forKeyedSubscript: "gameStarted")
+        }
+        evaluateInJavaScriptContext(gameStarted, completion: nil)
+    }
 }
 </code></pre>
