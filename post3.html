@@ -1,21 +1,17 @@
 <h2 class="blog-post-title">tvOS Development</h2>
 <p class="blog-post-meta">January 5, 2016</p>
 <hr>
-<p>
-	Apple has provided two methods of developing apps on tvOS:
-</p> 
-<ol type="1">
-	<li>TVML Apps: These apps use TVML, TVJS and TVMLKit. </li>
-	<li>Custom Apps: These apps are honestly just iOS applications.</li>
-</ol>
-<p>
-	I followed a Ray Wenderlich <a href="http://www.raywenderlich.com/114886/beginning-tvos-development-with-tvml-tutorial" target="_blank">tutorial</a> to learn the basics, but I always take these tutorials a few steps further. My company is developing an iOS and tvOS multiplayer game. My plan is to use TVML for the main menu and use a Game Scene to present our game. When the game is over we'd come round circle back to the main menu (TVML). I figured out how to accomplish this and it's available <a href="https://github.com/RyanPliske/AppleTVSpike" target="_blank">Here</a>.
+<p class="indent">
+	Apple has provided us with new tools to develop apps for the 4th Generation Apple TV: TVML, TVJS and TVMLKit. I followed a Ray Wenderlich <a href="http://www.raywenderlich.com/114886/beginning-tvos-development-with-tvml-tutorial" target="_blank">tutorial</a>, but I always modify them by writing cleaner code and taking them a few steps further...
 </p>
-<p>
-	I'll briefly go over the important parts. Here we go!
+<p class="indent">
+    My company, CompetiDev, is developing both an iOS and tvOS multiplayer game. These will be two separate, but related applications. My plan for the AppleTV version is to spin up a server which will serve TVML to my user's AppleTV in order to display the main menu for the game.
 </p>
-<p>
-	Firstly, my <b>App Delegate</b> takes advantage of the <i>didFinishLaunchingWithOptions</i> method which is called by UIApplication when the tvOS app is done initially setting up. It's main purpose is to setup the window that manages the views my app displays on the TV screen and to setup <b>MyTVApp</b> and hold onto this object.
+<p class="indent">
+    Once they've selected their character, I want to load the game using a Game Scene (SpriteKit). When the game is over we'd come back to the main menu (TVML). I've added this ability to my spike and have made it available <a href="https://github.com/RyanPliske/AppleTVSpike" target="_blank">Here</a>. I'll briefly go over the important parts. Let's go!
+</p>
+<p class="indent">
+	Firstly, my <span class="blog-class">AppDelegate</span> takes advantage of the <i>didFinishLaunchingWithOptions</i> method which is called by <span class="blog-class">UIApplication</span> when the tvOS app is done initially spinning up. It's main purpose is to create the <span class="blog-class">UIWindow</span> and <span class="blog-myclass">MyTVApp</span> and hold onto these objects.
 </p>
 <pre><code class="swift code">@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -29,8 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 </code></pre>
-<p>
-	Secondly, <b>MyTVApp</b> adheres to a custom delegate, MyTVAppControllerDelegate that I created. It listens to if and when the server responds with my HTML
+<p class="indent">
+	Secondly, <span class="blog-myclass">MyTVApp</span> adheres to a custom delegate, <span class="blog-myclass">MyTVAppControllerDelegate</span> that I created. It listens to if and when the server responds with my main menu's TVML.
 </p>
 <pre><code class="swift code">import TVMLKit
 
