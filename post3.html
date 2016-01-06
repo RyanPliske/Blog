@@ -1,0 +1,32 @@
+<h2 class="blog-post-title">tvOS Development</h2>
+<p class="blog-post-meta">January 5, 2016</p>
+<hr>
+<p>
+	Apple has provided two methods of developing apps on tvOS:
+</p> 
+<ol type="1">
+	<li>TVML Apps: These apps use TVML, TVJS and TVMLKit. </li>
+	<li>Custom Apps: These apps are honestly just iOS applications.</li>
+</ol>
+<p>
+	I followed a Ray Wenderlich <a href="http://www.raywenderlich.com/114886/beginning-tvos-development-with-tvml-tutorial" target="_blank">tutorial</a> to learn the basics, but I always take these tutorials a few steps further. My company is developing an iOS and tvOS multiplayer game. My plan is to use TVML for the main menu and use a Game Scene to present our game. When the game is over we'd come round circle back to the main menu (TVML). I figured out how to accomplish this and it's available <a href="https://github.com/RyanPliske/AppleTVSpike" target="_blank">Here</a>.
+</p>
+<p>
+	I'll briefly go over the important parts. Here we go!
+</p>
+<p>
+	Firstly, my <b>App Delegate</b> takes advantage of the <i>didFinishLaunchingWithOptions</i> method which is called by UIApplication when the tvOS app is done initially setting up. It's main purpose is to setup the window that manages the views my app displays on the TV screen and to setup <b>MyTVApp</b> and hold onto this object.
+</p>
+<pre><code class="Swift" style="overflow-x:scroll">
+@UIApplicationMain
+class <b>AppDelegate</b>: UIResponder, UIApplicationDelegate {
+	var window: UIWindow?
+	var tvApp: <b>MyTVApp</b>!
+
+	<abbr style="white-space:nowrap">func application(application: UIApplication, <i>didFinishLaunchingWithOptions</i> launchOptions: [NSObject : AnyObject]?) -> Bool {</abbr>
+	    window = UIWindow(frame: UIScreen.mainScreen().bounds)
+	    tvApp = MyTVApp(window: window!)
+	    return true
+	}
+}
+</code></pre>
