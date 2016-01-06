@@ -12,6 +12,6 @@ function setup() {
   });
 }
 
-var highlight = function highlight() {
+var highlight = function() {
   hljs.initHighlighting()
 }
