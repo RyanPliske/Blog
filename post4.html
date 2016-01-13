@@ -1,0 +1,19 @@
+<h2 class="blog-post-title">UI Tests Bug Fix</h2>
+<p class="blog-post-meta">January 13, 2016</p>
+<hr>
+<p class="indent">
+	Apple has provided us with a new automated UI Testing tool within Xcode. It can be used in either an Obj-C or Swift project. It is still fairly new and thus it's going to have a few bugs. 
+</p>
+<p class="indent">
+	I found one of those bugs today. I saw that no one on Stack Overflow had a good solution, so I came up with a nice work around that will work in a team environment (at least until Apple fixes this bug).
+</p>
+<p class="indent">
+	This bug occurrs when you try to run XCUIElement's <b>typeText</b> method when your simulator has "Connect Hardware Keyboard" turned on in the Harware settings. Most of us use our keyboards to type while testing our applications. As the bug sits now, you would have to go and turn that feature off in order to successfully run your UI Tests. You get a nasty "neither element nor any descendant has keyboard focus" error. No bueno.
+</p>
+<p class="indent">
+	My workaround is easy. Instead of typing, you can paste! So your code would look something like this:
+</p>
+<pre><code class="swift code">UIPasteboard.generalPasteboard().string = "Hello World!"
+textField.pressForDuration(1.1)
+app.menuItems["Paste"].tap()
+</code></pre>

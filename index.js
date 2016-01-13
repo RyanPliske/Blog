@@ -8,10 +8,13 @@ function setup() {
     $("#post1").load("post1.html");
     $("#post2").load("post2.html");
     $("#post3").load("post3.html", highlight);
+    $("#post4").load("post4.html", highlight);
     $("#footer").load("footer.html");
   });
 }
 
 var highlight = function() {
-  hljs.initHighlighting()
-}
+  $('pre code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+};
