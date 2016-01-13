@@ -10,12 +10,10 @@
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" defer>
     <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/xcode.css" defer>
-    <!-- <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" defer> -->
     <link rel="stylesheet" href="blog.css">
     <script type="text/javascript" src="index.js"></script>
     <script type="text/javascript" src="highlight.pack.js" defer></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" defer onload="loadHTML()"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" defer onload="prepareAccordion()"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" defer onload="setup()"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" defer></script>
   </head>
   <body>
@@ -24,14 +22,9 @@
       <div id="blog-header"></div>
       <div class="row">
         <div class="col-sm-8 blog-main">
-          <div id="accordion">
-            <h2 class="blog-post-title">tvOS Development</h2>
-            <div id="post3" class="blog-post"></div>
-            <h2 class="blog-post-title">Git Ignores</h2>
-            <div id="post2" class="blog-post"></div>
-            <h2 class="blog-post-title">Why I Prefer Mobile Development</h2>
-            <div id="post1" class="blog-post"></div>
-          </div>
+          <div id="post3" class="blog-post"></div>
+          <div id="post2" class="blog-post"></div>
+          <div id="post1" class="blog-post"></div>
         </div>
         <div id="sidebar"></div>
       </div>
